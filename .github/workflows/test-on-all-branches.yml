@@ -53,7 +53,3 @@ jobs:
         if: github.ref == 'refs/heads/dev'  && steps.test.outcome == 'success'
         run: |
           docker run -d -p 4200:4200 angular-app
-        ports:
-          - 4200:4200
-        env:
-          - NODE_ENV=production
