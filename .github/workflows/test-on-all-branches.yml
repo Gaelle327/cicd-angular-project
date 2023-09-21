@@ -35,7 +35,6 @@ jobs:
       - name: Stop and Remove Running Containers
         if: github.ref == 'refs/heads/dev' && steps.test.outcome == 'success'
         run: |
-          # Stop and remove containers using the image (if any)
           docker stop my-calculator-angular-app-container || true
           docker rm my-calculator-angular-app-container || true
 
@@ -52,4 +51,4 @@ jobs:
       - name: Run Docker Container
         if: github.ref == 'refs/heads/dev'  && steps.test.outcome == 'success'
         run: |
-          docker run -d -p 4200:4200 angular-app
+          docker run -p 8080:4200 --name my-calculator-angular-app-container -d my-calculator-angular-app
