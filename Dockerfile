@@ -10,7 +10,7 @@ RUN npm install -g @angular/cli
 COPY . /app
 
 # Build the Angular application
-RUN ng build --prod
+RUN ng build
 
 # Stage 2: Serve Angular Application using ng serve
 FROM node:latest
