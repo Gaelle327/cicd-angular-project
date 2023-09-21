@@ -29,10 +29,23 @@ jobs:
         run: npm install puppeteer
 
       - name: Run tests
+        id: test
         run: ng test --watch=false --browsers=ChromeHeadless
 
-      - name: Publish test results (optional)
-        uses: actions/upload-artifact@v2
-        with:
-          name: test-results
-          path: ./test-report
+      - name: Stop and Remove Running Containers
+        if: github.ref == 'refs/heads/dev'
+        run: |
+          # Stop and remove containers using the image (if any)
+          docker stop my-calculator-angular-app-container || true
+          docker rm my-calculator-angular-app-container || true
+
+      - name: Remove Previous Docker Image
+        if: github.ref == 'refs/heads/dev'  # Only run on the 'dev' branch
+        run: |
+          # Remove the existing Docker image if it exists
+          docker rmi -f my-calculator-angular-app || true
+
+      - name: Create Docker image and push to Docker Hub
+        if: github.ref == 'refs/heads/dev'  && steps.test.outcome == 'success'
+        run: |
+          docker build -t my-calculator-angular-app .
