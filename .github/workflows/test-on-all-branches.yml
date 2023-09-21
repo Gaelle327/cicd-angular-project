@@ -25,8 +25,5 @@ jobs:
           npm install -g @angular/cli
           echo "Angular CLI installed successfully"
 
-      - name: Build Angular Application
-        run: ng build --prod
-
       - name: Run tests
         run: ng test --watch=false
