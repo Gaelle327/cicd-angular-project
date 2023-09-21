@@ -20,5 +20,8 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Install Angular CLI
+        run: npm install --save-dev @angular/cli
+
       - name: Run tests
         run: ng test --watch=false
