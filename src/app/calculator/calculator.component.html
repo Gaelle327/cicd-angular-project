@@ -1,0 +1,11 @@
+<div>
+  <h1>Sum Calculator</h1>
+  <label for="num1">Enter the first number:</label>
+  <input type="number" id="num1" [(ngModel)]="num1" />
+  <br />
+  <label for="num2">Enter the second number:</label>
+  <input type="number" id="num2" [(ngModel)]="num2" />
+  <br />
+  <button (click)="calculateSum()">Calculate Sum</button>
+  <p *ngIf="result">Sum: {{ result }}</p>
+</div>
