@@ -32,14 +32,24 @@ jobs:
         id: test
         run: ng test --watch=false --browsers=ChromeHeadless
 
-      - name: Build Docker image
+      - name: Stop and Remove Running Containers
+        if: github.ref == 'refs/heads/dev' && steps.test.outcome == 'success'
+        run: |
+          # Stop and remove containers using the image (if any)
+          docker stop my-calculator-angular-app-container || true
+          docker rm my-calculator-angular-app-container || true
+
+      - name: Remove Previous Docker Image
+        if: github.ref == 'refs/heads/dev' && steps.test.outcome == 'success'
+        run: |
+          docker rmi -f my-calculator-angular-app || true
+
+      - name: Create Docker image
         if: github.ref == 'refs/heads/dev'  && steps.test.outcome == 'success'
         run: |
-          docker build -t angular-app .
-        working-directory: "C:\Users\User\Desktop\University\sem5\1- cicd\Angular-CICD-Sample\angular-sum-calculator"
+          docker build -t my-calculator-angular-app .
 
-
-      - name: Run Docker container
+      - name: Run Docker Container
         if: github.ref == 'refs/heads/dev'  && steps.test.outcome == 'success'
         run: |
           docker run -d -p 4200:4200 angular-app
