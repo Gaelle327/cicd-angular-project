@@ -18,4 +18,4 @@ RUN npm run build
 EXPOSE 4200
 
 # Start the Angular app
-CMD ["ng", "serve","-o"]
+CMD ["npm", "start"]
