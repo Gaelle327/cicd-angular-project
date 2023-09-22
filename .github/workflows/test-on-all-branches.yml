@@ -6,7 +6,7 @@ on:
 
 jobs:
   build:
-    runs-on:  ubuntu-latest
+    runs-on:  self-host
 
     steps:
       - name: Checkout Repository
@@ -65,4 +65,4 @@ jobs:
       - name: Run Docker Container
         if: github.ref == 'refs/heads/dev'
         run: |
-          docker run -p 8080:4200 --name my-calculator-angular-app-container -d ${{ secrets.DOCKER_HUB_USERNAME }}/my-calculator-angular-app
+          docker run -p 4200:4200 --name my-calculator-angular-app-container -d ${{ secrets.DOCKER_HUB_USERNAME }}/my-calculator-angular-app
