@@ -35,13 +35,15 @@ jobs:
       - name: Stop and Remove Running Containers
         if: github.ref == 'refs/heads/dev'
         run: |
-          docker stop my-calculator-angular-app-container || true
-          docker rm my-calculator-angular-app-container || true
+          docker stop my-calculator-angular-app-container
+          docker rm my-calculator-angular-app-container
+        continue-on-error: true
 
       - name: Remove Previous Docker Image
         if: github.ref == 'refs/heads/dev'
         run: |
-          docker rmi -f my-calculator-angular-app || true
+          docker rmi -f my-calculator-angular-app
+        continue-on-error: true
 
       - name: Create Docker image
         if: github.ref == 'refs/heads/dev'
