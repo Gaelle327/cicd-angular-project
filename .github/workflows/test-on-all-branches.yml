@@ -6,7 +6,7 @@ on:
 
 jobs:
   build:
-    runs-on:  self-hosted
+    runs-on:  ubuntu-latest
 
     steps:
       - name: Checkout Repository
@@ -25,12 +25,12 @@ jobs:
           npm install -g @angular/cli
           echo "Angular CLI installed successfully"
 
-#      - name: Configure Puppeteer
-#        run: npm install puppeteer
+      - name: Configure Puppeteer
+        run: npm install puppeteer
 
-#      - name: Run tests
-#        id: test
-#        run: ng test --watch=false --browsers=ChromeHeadless
+      - name: Run tests
+        id: test
+        run: ng test --watch=false --browsers=ChromeHeadless
 
       - name: Stop and Remove Running Containers
         if: github.ref == 'refs/heads/dev'
@@ -42,15 +42,24 @@ jobs:
       - name: Remove Previous Docker Image
         if: github.ref == 'refs/heads/dev'
         run: |
-          docker rmi -f my-calculator-angular-app
+          docker rmi -f ${{ secrets.DOCKER_HUB_USERNAME }}/my-calculator-angular-app
         continue-on-error: true
 
       - name: Create Docker image
         if: github.ref == 'refs/heads/dev'
         run: |
-          docker build -t my-calculator-angular-app .
+          docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/my-calculator-angular-app .
+
+      - name: login to docker hub
+        run: docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} -p ${{ secrets.DOCKER_HUB_PASSWORD }}
+
+      - name: tag docker image
+        run: docker tag ${{ secrets.DOCKER_HUB_USERNAME }}/my-calculator-angular-app ${{ secrets.DOCKER_HUB_USERNAME }}/my-calculator-angular-app:latest
+
+      - name: push to docker hub
+        run: docker push ${{ secrets.DOCKER_HUB_USERNAME }}/my-calculator-angular-app:latest
 
       - name: Run Docker Container
         if: github.ref == 'refs/heads/dev'
         run: |
-          docker run -p 8080:4200 --name my-calculator-angular-app-container -d my-calculator-angular-app
+          docker run -p 8080:4200 --name my-calculator-angular-app-container -d ${{ secrets.DOCKER_HUB_USERNAME }}/my-calculator-angular-app
