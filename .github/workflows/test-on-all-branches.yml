@@ -25,8 +25,8 @@ jobs:
           npm install -g @angular/cli
           echo "Angular CLI installed successfully"
 
-      - name: Configure Puppeteer
-        run: npm install puppeteer
+#      - name: Configure Puppeteer
+#        run: npm install puppeteer
 
       - name: Run tests
         id: test
